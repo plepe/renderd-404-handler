@@ -47,22 +47,16 @@ if(!$file_404) {
     $file_404 = $data['404_image'];
 }
 
-print $file_404;
-exit;
-
-$list=array(array(10, array(
-  'body'=>"The requested URL {$_SERVER['REQUEST_URI']} was not found on this server.",
-)));
-
-$list=weight_sort($list);
-if(isset($list[0]['header'])) {
-  foreach($list[0]['header'] as $header)
-    Header($header);
-}
-
 $refresh = 20;
 Header("Refresh: {$refresh}");
 Header("Retry-After: {$refresh}");
 Header("Expires: " . Date("r", time() + $refresh));
 
-print $list[0]['body'];
+if($file_404) {
+  $content_type = mime_content_type($file_404);
+  Header("content-type: {$content_type}");
+  readfile($file_404);
+  exit;
+}
+
+print "The requested URL {$_SERVER['REQUEST_URI']} was not found on this server.";
