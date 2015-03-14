@@ -1,0 +1,2 @@
+<?php
+$renderd_conf_file = "/etc/renderd.conf";
