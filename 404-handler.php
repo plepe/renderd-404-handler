@@ -31,6 +31,24 @@ function renderd_conf_parse($file) {
 }
 
 $renderd_conf = renderd_conf_parse($renderd_conf_file);
+$file_404 = null;
+
+foreach($renderd_conf as $block=>$data) {
+  if(array_key_exists('URI', $data) &&
+     substr($_SERVER['REQUEST_URI'], 0, strlen($data['URI'])) == $data['URI']) {
+    if(array_key_exists('404_image', $data))
+      $file_404 = $data['404_image'];
+  }
+}
+
+if(!$file_404) {
+  $data = $renderd_conf['renderd'];
+  if(array_key_exists('404_image', $data))
+    $file_404 = $data['404_image'];
+}
+
+print $file_404;
+exit;
 
 $list=array(array(10, array(
   'body'=>"The requested URL {$_SERVER['REQUEST_URI']} was not found on this server.",
